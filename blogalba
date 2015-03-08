@@ -41,11 +41,11 @@ sub readpost {
 	$postm{body} = markdown($postb); undef $postb;
 	if (defined $postm{date}) {
 		$postm{slug} = slugify($postm{title}) unless $postm{slug}; #we allow custom slugs to be defined
-		$postm{hastags} = (defined $postm{tags}? 1 : 0);
+		$postm{hastags} = 1 unless not defined $postm{tags};
 		$postm{excerpt} = $1 if $postm{body} =~ /(<p>.*?<\/p>)/s;
 		$postm{time} = str2time($postm{date});
-		$postm{datetime} = timefmt($postm{date},'datetime');
 		$postm{fancy} = timefmt($postm{time},'fancydate');
+		$postm{datetime} = timefmt($postm{date},'datetime');
 		$postm{permaurl} = $blog->{url}.$blog->{posturlprepend}.timefmt($postm{time},'permalink').$postm{slug};
 	}
 	push @posts,{%postm} if $psh==1; push @pages,{%postm} if $psh==2;return %postm;
