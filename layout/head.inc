@@ -50,9 +50,10 @@
 					<ul class="nav nav-stacked">
 						<TMPL_IF NAME="ISPOST">
 						<li><h3 class="highlight">This Post</h3></li>
-						[% use date %][% dsuffix = 'th' %][% dsuffix = 'st' if page.day == 01 %][% dsuffix = 'nd' if page.day == 02 %]
-						<li>Published: [% date.format(page.date, "%A, %e$dsuffix %b. %Y", 'en_GB', 1) %]</li>
-						<li>Tags: [% page.tags %]</li>
+						<li>Published: <TMPL_VAR NAME="fancy"></li>
+						<TMPL_IF NAME="HASTAGS">
+						<li>Tags: <TMPL_VAR NAME="tags"></li>
+						</TMPL_IF>
 						</TMPL_IF>
 						<li><h3 class="highlight">Posts</h3></li>
 						<TMPL_LOOP NAME="recent">
