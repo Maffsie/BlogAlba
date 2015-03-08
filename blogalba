@@ -117,8 +117,8 @@ sub do_cache {
 	undef @posts and undef @pages if $#posts > 0 or $#pages > 0;
 	opendir POSTS, "$basedir/posts/" or die "Couldn't open posts directory $basedir/posts/";
 	while(readdir POSTS) {
-		next if /^\./ or /draft$/;
-		say "Error reading post $_" and next unless readpost "$basedir/posts/$_";
+		next unless /\.md$/;
+		warn "Error reading post $_\n" and next unless readpost("$basedir/posts/$_",1);
 		$nposts++;
 	}
 	closedir POSTS;
@@ -126,8 +126,8 @@ sub do_cache {
 
 	opendir PAGES, "$basedir/pages/" or die "Couldn't open pages directory $basedir/pages/";
 	while(readdir PAGES) {
-		next if /^\./ or /draft$/;
-		say "Error reading page $_" and next unless readpost("$basedir/pages/$_",2);
+		next unless /\.md$/;
+		warn "Error reading page $_\n" and next unless readpage("$basedir/pages/$_",2);
 	}
 	closedir PAGES;
 
@@ -141,9 +141,6 @@ sub do_cache {
 	);
 	pagination_calc;
 }
-
-do_cache;
-page_init;
 
 set server => '127.0.0.1';
 set port => 42069;
