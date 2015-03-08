@@ -6,7 +6,7 @@
 		<meta name="keywords" content="<TMPL_VAR NAME="keywords">" />
 		<meta name="author" content="<TMPL_VAR NAME="author">" />
 		<meta name="description" content="<TMPL_VAR NAME="tagline">" />
-		<meta property="og:title" content="<TMPL_VAR NAME="name">" />
+		<meta property="og:title" content="<TMPL_VAR NAME="pagetitle">" />
 		<meta property="og:site_name" content="<TMPL_VAR NAME="name">" />
 		<meta property="og:description" content="<TMPL_VAR NAME="tagline">" />
 		<title><TMPL_VAR NAME="pagetitle"></title>
