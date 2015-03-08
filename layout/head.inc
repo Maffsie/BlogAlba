@@ -50,9 +50,9 @@
 					<ul class="nav nav-stacked">
 						<TMPL_IF NAME="ISPOST">
 						<li><h3 class="highlight">This Post</h3></li>
-						<li>Published: <TMPL_VAR NAME="fancy"></li>
+						<li>Published: <span class="highlight"><TMPL_VAR NAME="fancy"></span></li>
 						<TMPL_IF NAME="hastags">
-						<li>Tags: <TMPL_VAR NAME="tags"></li>
+						<li>Tags: <span class="highlight"><TMPL_VAR NAME="tags"></span></li>
 						</TMPL_IF>
 						</TMPL_IF>
 						<li><h3 class="highlight">Posts</h3></li>
