@@ -142,7 +142,7 @@ do_cache;
 page_init;
 
 set server => '127.0.0.1';
-set port => 10420;
+set port => 42069;
 
 hook 'before' => sub {
 	page_init;
