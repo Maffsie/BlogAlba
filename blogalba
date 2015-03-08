@@ -1,0 +1,173 @@
+#!/usr/bin/env perl
+# BlogAlba - no-frills markdown blogging system
+
+package App::BlogAlba;
+
+use strict;
+use warnings;
+use feature qw/say/;
+
+use POSIX qw/strftime/;
+use Date::Parse qw/str2time/;
+use File::Spec;
+use HTML::Template;
+use Text::MultiMarkdown qw/markdown/;
+use Unicode::Normalize;
+use YAML;
+
+use Dancer2;
+
+my $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/blogalba$//;
+my $cfg="$basedir/blog.conf";
+my $blog=YAML::LoadFile("$basedir/blog.conf") or die "Couldn't load $basedir/blog.conf!";
+$blog->{url} .= '/' unless $blog->{url} =~ /\/$/;
+
+my ($page,@posts,@pages,%defparams);
+my $nposts=0;my $npages=1;my $lastcache=0;
+
+sub readpost {
+	my $file = shift;my $psh = shift || 1;
+	my $postb = ""; my $postmm = "";
+	open POST, $file or warn "Couldn't open $file!" and return 0;
+	my $status = 0;
+	while (<POST>) {
+		$postb .= $_ if $status==2;
+		/^-{3,}$/ and not $status==2 and $status = $status==1? 2 : 1;
+		$postmm .= $_ if $status==1;
+	}
+	close POST; undef $status;
+	my %postm = %{YAML::Load($postmm)}; undef $postmm;
+	$postm{filename} = $1 if $file =~ /(?:^|\/)([a-zA-Z0-9\-]*)\.md$/;
+	$postm{body} = markdown($postb); undef $postb;
+	if (defined $postm{date}) {
+		$postm{slug} = slugify($postm{title}) unless $postm{slug}; #we allow custom slugs to be defined
+		$postm{excerpt} = $1 if $postm{body} =~ /(<p>.*?<\/p>)/s;
+		$postm{time} = str2time($postm{date});
+		$postm{datetime} = timefmt($postm{date},'datetime');
+		$postm{permaurl} = $blog->{url}.$blog->{posturlprepend}.timefmt($postm{time},'permalink').$postm{slug};
+	}
+	push @posts,{%postm} if $psh==1; push @pages,{%postm} if $psh==2;return %postm;
+}
+sub slugify {
+	my $t = shift;
+	$t = lc NFKD($t); #Unicode::Normalize
+	$t =~ tr/\000-\177//cd; #Strip non-ascii
+	$t =~ s/[^\w\s-]//g; #Strip non-words
+	chomp $t;
+	$t =~ s/[-\s]+/-/g; #Prevent multiple hyphens or any spaces
+	return $t;
+}
+sub timefmt {
+	my ($epoch,$context)=@_;
+	$epoch=str2time $epoch if $context eq 'readpost' or $context eq 'datetime';
+	return strftime "%Y-%m-%dT%H:%M%z",localtime $epoch if $context eq 'datetime';
+	return strftime "%Y-%m",localtime $epoch if $context eq 'writepost';
+	return strftime "%Y/%m/",localtime $epoch if $context eq 'permalink';
+	return strftime $context, localtime $epoch if $context;
+	return strftime $blog->{config}->{date_format},localtime $epoch;
+}
+sub pagination_calc {
+	my $rem=$nposts % $blog->{config}->{per_page};
+	$npages=($nposts-$rem)/$blog->{config}->{per_page};
+	$npages++ if $rem>0 or $npages<1;
+}
+sub get_index {
+	my @iposts = @_;
+	$page->param(pagetitle => $blog->{name}, INDEX => 1, POSTS => [@iposts]);
+	return $page->output;
+}
+sub paginate {
+	my $pagenum = shift; my $offset = ($pagenum-1)*$blog->{config}->{per_page};
+	my $offset_to = $offset+($blog->{config}->{per_page}-1); $offset_to = $#posts if $offset_to > $#posts;
+	$page->param(PAGINATED => 1, prevlink => ($pagenum>1? 1 : 0), prevpage => $pagenum-1, nextlink => ($pagenum<$npages? 1 : 0), nextpage => $pagenum+1);
+	return get_index @posts[$offset..(($offset+$blog->{config}->{per_page})>$#posts? $#posts : ($offset+($blog->{config}->{per_page}-1)))];
+}
+sub page_init {
+	$page = HTML::Template->new(filename => "$basedir/layout/base.html",die_on_bad_params => 0,utf8 => 1,global_vars => 1);
+	$page->param(%defparams);
+}
+sub get_post {
+	my ($y,$m,$slug) = @_;
+	for my $r (@posts) {
+		my %post = %$r;
+		next unless $post{slug} eq $slug and timefmt($post{time},'writepost') eq "$y-$m";
+		$page->param(pagetitle => "$post{title} - $blog->{name}",%post);
+		return 1;
+	}
+	return undef;
+}
+sub get_page {
+	my $pname = shift;
+	for my $r (@pages) {
+		my %cpage = %$r;
+		next unless $cpage{filename} eq $pname;
+		$page->param(pagetitle => "$cpage{title} - $blog->{name}",%cpage);
+		return 1;
+	}
+	return undef;
+}
+
+sub do_cache {
+	return if $lastcache > (time - 3600);
+	$lastcache = time;
+	undef @posts and undef @pages if $#posts > 0 or $#pages > 0;
+	opendir POSTS, "$basedir/posts/" or die "Couldn't open posts directory $basedir/posts/";
+	while(readdir POSTS) {
+		next if /^\./ or /draft$/;
+		say "Error reading post $_" and next unless readpost "$basedir/posts/$_";
+		$nposts++;
+	}
+	closedir POSTS;
+	@posts = map {$_->[1]} sort {$b->[0] <=> $a->[0]} map {[$_->{time},$_]} @posts;
+
+	opendir PAGES, "$basedir/pages/" or die "Couldn't open pages directory $basedir/pages/";
+	while(readdir PAGES) {
+		next if /^\./ or /draft$/;
+		say "Error reading page $_" and next unless readpost("$basedir/pages/$_",2);
+	}
+	closedir PAGES;
+
+	my @nav;
+	push @nav, {navname => $_->{title}, navurl => "$blog->{url}$_->{filename}",} for @pages;
+	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for keys $blog->{links};
+	%defparams = (
+		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > 7? 7 : $#posts)]],
+		about => $blog->{about}, author => $blog->{author}, name => $blog->{name}, tagline => $blog->{tagline}, keywords => $blog->{keywords},
+		robots => $blog->{config}->{indexable}? '<meta name="ROBOTS" content="INDEX, FOLLOW" />' : '<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />',
+	);
+	pagination_calc;
+}
+
+do_cache;
+page_init;
+
+set server => '127.0.0.1';
+set port => 10420;
+
+hook 'before' => sub {
+	page_init;
+};
+
+get '/' => sub {
+	return get_index @posts if $npages==1;
+	return paginate 1;
+};
+get '/page/:id' => sub {
+	pass unless params->{id} =~ /^[0-9]+$/ and params->{id} <= $npages;
+	return redirect '/' unless $npages > 1 and params->{id} > 1;
+	return paginate params->{id};
+};
+get '/wrote/:yyyy/:mm/:slug' => sub {
+	pass unless params->{yyyy} =~ /^[0-9]{4}$/ and params->{mm} =~ /^(?:0[1-9]|1[0-2])$/ and params->{slug} =~ /^[a-z0-9\-]+$/i;
+	$page->param(ISPOST => 1);
+	get_post params->{yyyy}, params->{mm}, params->{slug} or pass;
+	return $page->output;
+};
+get '/:extpage' => sub {
+	pass unless params->{extpage} =~ /^[a-z0-9\-]+$/i;
+	$page->param(ISPOST => 0);
+	get_page params->{extpage} or pass;
+	return $page->output;
+};
+
+start;

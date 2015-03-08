@@ -1,0 +1,80 @@
+==================================================================
+https://keybase.io/maff
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://maff.scot
+  * I am maff (https://keybase.io/maff) on keybase.
+  * I have a public key with fingerprint 174B D339 05B9 BDF0 E392  C0DB 7B8A 457D 282B 7CB6
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "174bd33905b9bdf0e392c0db7b8a457d282b7cb6",
+            "host": "keybase.io",
+            "key_id": "7b8a457d282b7cb6",
+            "kid": "0101173cbe7c5c238b56d0b5342e502f42e3819eb3efe3758402ebe01309ffb1e86d0a",
+            "uid": "16ecf0e834040844c37cb87fccf07a00",
+            "username": "maff"
+        },
+        "revoke": {
+            "sig_ids": [
+                "6a735cf8438516b1145fc2108a2e9e56c7145826586afeb8c90c8884c7e28bf70f"
+            ]
+        },
+        "service": {
+            "hostname": "maff.scot",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1420589618,
+    "expire_in": 157680000,
+    "prev": "558fab3b83e1744abd4f611b1c436e2802b35a82d44e49157f350913f3c63360",
+    "seqno": 14,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.1
+Comment: https://keybase.io/crypto
+
+yMNwAnicbVJrTFRHGN2laOsiqTx+GCRpe6UCSt1779zH3BVpbEOMUmqlPkqx0Dt3
+58LlsbvsS1ZcoYVoA1oQBFpKKr41oMFEC9KiQmktbNBoaoktbSB9xMhDRLRKfXQu
+aZP+6Pz5MmfOd86Zb6Y39BmDyVhckeyPW7b9C2Ogu8Fj2NC6jS2mkN3qoyzFVB6e
+Lapmy8ZOh1OzuSkLxYgcsgIg0TySkFWlMZBYhbYiEUGZ40UrC1kkKkigEqgcu0vv
+IDJIduHlmp1gZJOlWQn6P/y82QOaoRlGBArCosIrLICIF6w04gHHYp5mVVIAZCSM
+AFYxEHnI0SxGmGYALakqYjAkdJnIeWblGAErJCUEHM3RkOMUQNygqCoEFWWa1oku
+7LTJBZiwC2RVpfwJlBN77XlYv71LyyaBXZQlgxJkEfCKCjkAeUZADMPxqsIyNJRZ
+LGFeUESCQFbgoSCrGEFFohUIIaeImIVIFWmVeo9oEzevpsyK6xP6j/Nyl2J3k0AO
+p91tV+z5BM5xux0uix7J7XPovK0YZf2jkIU0m5U8DunwYqdLs9soC0OYilvTJRmO
+pXkoCQxMoHCRQ3PiLE1n8KIAabJ0H+wlkjwPVRkBBAEmr8vJyMqpAsMgRuGAQKLT
+LAK8DFkrx2FOIv0q4GmJASpQBAAEfYQuXGiz65Ykp5xNNMnYbLLb48SUv6d7S7DB
+aDLMnROk/y+Dad6Cf39dQuECw4HY8sRjbz/yZx6b0/LzoV/M2UFmY2tEVfxus/bp
+g4WlvoV+10zvwRvBO1/U8ph1i9w1E2GHPG3e0YbUxE2XuOF8idoYdcbDV10N71+/
+M+jIypha+enEt6d3hARXp8TMf3PLwI298k9zq9vlussxxm86zlYcp1B+5IOytc2N
+F8/cpQM1wx88Gx418Li7NXXEWl7WotxqzDDH+47H7po31OA722nusfq3TZsSwwfG
+XLe6hl+SDIGpz1+NuGxaMTLUjofmi3e0Uxf6r+xuWvl+xA/K3XO/1weu5ewZks69
+e8jg/TI3UFpwp7XAfF5u33f0yeFO8MmV2sa7g6aRdypPno579MKazHvpe6o2N89E
+l6L9LcrasILDS/3RhWdOvfVbIPBx1Mz6vso4x9KWTpoNbZZzn6vfFRnrr1i3eqNx
+tD++uO7H2q9C+uI3pH3XtWRw0JH5+uTY1CQEXaFH6tacbzrRe+EPcUdS2Vh605M3
+nv91SQvuDRvO3fTXh5PJptBXxqfubS3KuW2TLeXXud7V19meyenEsb4Vw/sj2yJi
+D5YZr4FLNzc2XqyOHu9O57ZvTvP8WRJtTpNyJ06AksSa0Y82Z2ScTEoJe9m3rGrZ
+axNHV42fNrMHVrExRR2LwcPP9rWllFbETd/fu7jE8vT+1STOWxkz0nF4dFHy43rn
+wO2Qm997Kh+mfN3kS/0bNn7Awg==
+=ldGo
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/maff
+
+==================================================================
+

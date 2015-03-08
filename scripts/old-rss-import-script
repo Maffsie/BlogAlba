@@ -1,0 +1,71 @@
+#!/usr/bin/env perl
+# blog.Alba - no-frills markdown blogging system
+
+package Maff::Blog::Import;
+
+use strict;
+use warnings;
+use diagnostics;
+use feature qw/say/;
+
+use POSIX qw/strftime/;
+use Date::Parse qw/str2time/;
+use Encode qw/encode/;
+use File::Spec;
+use HTML::Entities qw/decode_entities/;
+use HTML::WikiConverter;
+use LWP::Simple qw/get/;
+use URI::Escape qw/uri_unescape/;
+use XML::RSS::Parser::Lite;
+
+our (%blog,%links);
+our $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/import\.pl$//;
+my $cfg="$basedir/blog.conf";
+unless(my $ret = do $cfg) {
+	die "Couldn't parse config file $cfg!" if $@;
+	die "Couldn't load config file $cfg!" unless defined $ret and $ret;
+}
+
+my $blogRSS="http://blog.maff.me.uk/feed/rss2";
+
+sub writepost {
+	my ($file,$post)=@_;
+	open TPL, "<$basedir/post/.tpl.md" or warn "Couldn't open post $basedir/post/.tpl.md!" and return 0;
+	my ($title,$tags)=($post->get('title'),$post->get('category'));
+	my $date=timefmt($post->get('pubDate'));
+	my $slug=lc uri_unescape $1 if $post->get('url')=~/^.*(?:(?:\d{2})\/)+([\w\d%\.\/\-_\(\)]+)$/i;
+	$slug=~s/[%\d\/\.,\(\)]/-/g;$slug=~s/\-\-+/-/g;$slug=~s/\-*$//;$slug=lc $slug;
+	my $html2md=new HTML::WikiConverter(dialect => 'Markdown', encoding => 'utf8', escape_entities => 0);
+	my $body = $html2md->html2wiki(encode 'utf8', decode_entities $post->get('description'));$body=~s/^	/    /gm;
+	my $md="";
+	while(<TPL>) {
+		s/\|ptitle\|/$title/;
+		s/\|ptags\|/$tags/;
+		s/\|pdate\|/$date/;
+		s/\|slug\|/$slug/;
+		next if /\|pbody\|/;
+		$md.=$_;
+	}
+	close TPL;$md.=$body;
+	open MD, ">$basedir/post/$file.md" or warn "Couldn't open post $basedir/post/$file.md" and return 0;
+	print MD $md;
+	close MD;
+	say "..converted to Markdown and saved to post/$file.md";
+}
+sub timefmt {
+	my ($epoch,$context)=@_;
+	$epoch=str2time $epoch;
+	return strftime "%Y-%m-%d %H:%M",localtime $epoch;
+}
+
+print "Fetching $blogRSS..";
+my $origfeed=get($blogRSS) or die "Couldn't fetch $blogRSS";
+$origfeed=~s/<\/category><category>/, /g;
+my $parser=new XML::RSS::Parser::Lite;$parser->parse($origfeed);
+say "found blog '".$parser->get('title')."'\nDescription: ".decode_entities $parser->get('description')."\nConverting to blog.Alba Markdown using template $basedir/post/.tpl.md.\n";
+for(my $i=1;$i<=$parser->count();$i++) {
+	my $item=$parser->get($parser->count()-$i);
+	print "Found post ".$item->get('title');
+	writepost $i, $item;
+}
+say "Import complete. Please check all posts in $basedir/post/ and then run gen.pl to generate your new blog.";
