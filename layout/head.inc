@@ -51,7 +51,7 @@
 						<TMPL_IF NAME="ISPOST">
 						<li><h3 class="highlight">This Post</h3></li>
 						<li>Published: <TMPL_VAR NAME="fancy"></li>
-						<TMPL_IF NAME="HASTAGS">
+						<TMPL_IF NAME="hastags">
 						<li>Tags: <TMPL_VAR NAME="tags"></li>
 						</TMPL_IF>
 						</TMPL_IF>

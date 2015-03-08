@@ -41,7 +41,7 @@ sub readpost {
 	$postm{body} = markdown($postb); undef $postb;
 	if (defined $postm{date}) {
 		$postm{slug} = slugify($postm{title}) unless $postm{slug}; #we allow custom slugs to be defined
-		$postm{hastags} = (defined $postm{tags} and length $postm{tags})? 1 : 0;
+		$postm{hastags} = (defined $postm{tags}? 1 : 0);
 		$postm{excerpt} = $1 if $postm{body} =~ /(<p>.*?<\/p>)/s;
 		$postm{time} = str2time($postm{date});
 		$postm{datetime} = timefmt($postm{date},'datetime');
