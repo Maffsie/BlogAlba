@@ -19,7 +19,7 @@ use Dancer2;
 
 my $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/blogalba$//;
 my $cfg="$basedir/config";
-my $blog=YAML::LoadFile("$basedir/blog.conf") or die "Couldn't load $basedir/config!";
+my $blog=YAML::LoadFile($cfg) or die "Couldn't load $cfg!";
 $blog->{url} .= '/' unless $blog->{url} =~ /\/$/;
 
 my ($page,@posts,@pages,%defparams);
