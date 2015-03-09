@@ -21,6 +21,7 @@ my $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/blogalba$//;
 my $cfg="$basedir/config";
 my $blog=YAML::LoadFile($cfg) or die "Couldn't load $cfg!";
 $blog->{url} .= '/' unless $blog->{url} =~ /\/$/;
+$blog->{links} = { sort { $b <=> $a } keys $blog->{links} };
 
 my ($page,@posts,@pages,%defparams);
 my $nposts=0;my $npages=1;my $lastcache=0;
