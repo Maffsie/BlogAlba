@@ -74,6 +74,7 @@ h3.highlight  {
 	color:#fff;
 	padding-left:20px;
 	padding-right:20px;
+	min-height: 48px; height: 48px;
 	border-left:1px solid #d7338e;
 }
 .navbar-nav > li > a:hover, .navbar-nav > li > a:focus {
