@@ -8,7 +8,7 @@ I'm a Systems Administrator, hobbyist photographer and scripting fanatic from Sc
 
 I can be contacted in the following ways:
 
-- email: matthew (at) maff (dot) scot
+- email: [matthew@maff.scot][11]
 - PGP: [0x7B8A457D282B7CB6][9] (keybase: [maff][10])
 - iMessage: hi@maff.scot
 - twitter, telegram: @maffsie
@@ -25,3 +25,4 @@ I can be contacted in the following ways:
 [8]: https://entropynet.net/
 [9]: http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x7B8A457D282B7CB6
 [10]: https://keybase.io/maff/
+[11]: mailto:matthew@maff.scot
