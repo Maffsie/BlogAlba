@@ -19,7 +19,7 @@ use Dancer2;
 
 my $ME = 'BlogAlba'; my $ME_GH = 'https://github.com/MaffC/BlogAlba/';
 my $VERSION = '0.6';
-my $HOST = `hostname`; chomp $HOST;
+my $HOST = `hostname -s`; chomp $HOST;
 
 my $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/blogalba$//;
 my $cfg="$basedir/config";
