@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+TITLE=`read -e -p 'Title of new post: '`
+TAGS=`read -e -p 'Tags for new post, comma-separated: '`
+FNAME="`date '+%Y%m%d'`.`echo "$TITLE"|tr -cd '[:alnum:]'`.md"
+cp posts/post.template posts/$FNAME
+[ -z "$EDITOR" ] && echo "EDITOR environment variable not set. Please set this to your preferred editor, or open $FNAME manually"
+$EDITOR posts/$FNAME
