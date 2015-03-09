@@ -90,7 +90,12 @@ h3.highlight  {
 	background-color:#fff;
 	border-color:#e8449f;
 }
-
+.nav > li > a {
+	padding: 6px 15px;
+}
+.nav > li:last-child > a {
+	padding-bottom: 12px;
+}
 .nav .open > a {
 	border-color:#777777;
 	border-width:0;
@@ -100,7 +105,7 @@ footer {
 	background-color:#e8449f;
 	color:#ffffff;
 	border-top: 2px solid white;
-	box-shadow: 0px 8px 20px 8px rgba(0,0,0,0.1);
+	box-shadow: 0px 0px 20px 8px rgba(0,0,0,0.1);
 	position: relative; bottom: 0;
 	text-align: center;
 }
@@ -132,10 +137,6 @@ footer > a, footer > a:hover, footer > a:focus {
 	background-color:#fff;
 }
 
-.col-sm-3 {
-	position: sticky;
-	top: 12px;
-}
 .col-sm-9 {
 	float:right;
 }
