@@ -9,7 +9,8 @@ I'm a Systems Administrator, hobbyist photographer and scripting fanatic from Sc
 I can be contacted in the following ways:
 
 - email: matthew (at) maff (dot) scot
-- hangouts, iMessage: hi@maff.scot
+- PGP: [0x7B8A457D282B7CB6][9] (keybase: [maff][10])
+- iMessage: hi@maff.scot
 - twitter, telegram: @maffsie
 - skype: matthew.connelly
 - irc: Maff @ [Freenode][7] and [EntropyNet][8]
@@ -22,3 +23,5 @@ I can be contacted in the following ways:
 [6]: https://github.com/MaffC/BlogAlba/
 [7]: https://freenode.net/
 [8]: https://entropynet.net/
+[9]: http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x7B8A457D282B7CB6
+[10]: https://keybase.io/maff/
