@@ -1,0 +1,4 @@
+#!/bin/sh
+cat > /dev/null
+git --git-dir /home/sites/blogalba/.git --work-tree /home/sites/blogalba pull
+[ ! -z "$(find /home/sites/blogalba -type d -name .git -prune -o -type f -mmin -1 -print|grep 'blogalba$')" ] && echo "Restarting blogalba" && /home/sites/blogalba/scripts/start
