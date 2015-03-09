@@ -66,7 +66,7 @@ sub slugify {
 sub timefmt {
 	my ($epoch,$context)=@_;
 	$epoch=str2time $epoch if $epoch !~ /^[0-9]{10}$/;
-	my $dsuffix = 'th'; $dsuffix = 'st' if strftime("%d",localtime $epoch) eq '01'; $dsuffix = 'nd' if strftime("%d",localtime $epoch) eq '02';
+	my $dsuffix = 'th'; $dsuffix = 'st' if strftime("%d",localtime $epoch) =~ /1$/; $dsuffix = 'nd' if strftime("%d",localtime $epoch) =~ /2$/;
 	return strftime "%A, %e$dsuffix %b. %Y", localtime $epoch if $context eq 'fancydate';
 	return strftime "%Y-%m-%dT%H:%M%z",localtime $epoch if $context eq 'datetime';
 	return strftime "%Y-%m",localtime $epoch if $context eq 'writepost';
