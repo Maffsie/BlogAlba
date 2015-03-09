@@ -115,7 +115,7 @@ sub get_page {
 sub do_cache {
 	return if $lastcache > (time - 3600);
 	$lastcache = time;
-	undef @posts and undef @pages if $#posts > 0 or $#pages > 0;
+	undef @posts;undef @pages;
 	opendir POSTS, "$basedir/posts/" or die "Couldn't open posts directory $basedir/posts/";
 	while(readdir POSTS) {
 		next unless /\.md$/;
