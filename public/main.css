@@ -84,11 +84,11 @@ h3.highlight  {
 }
 .navbar-nav > .active > a, .navbar-nav > .active > a:hover, .navbar-nav > .active > a:focus {
 	color: #ffffff;
-	background-color:transparent;
+	background-color:#fff;
 }
 .navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
 	color: #f0f0f0;
-	background-color:transparent;
+	background-color:#fff;
 	opacity:.9;
 	border-color:#e8449f;
 }
