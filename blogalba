@@ -17,6 +17,10 @@ use YAML;
 
 use Dancer2;
 
+my $ME = 'BlogAlba'; my $ME_GH = 'https://github.com/MaffC/BlogAlba/';
+my $VERSION = '0.6';
+my $HOST = `hostname`; chomp $HOST;
+
 my $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/blogalba$//;
 my $cfg="$basedir/config";
 my $blog=YAML::LoadFile($cfg) or die "Couldn't load $cfg!";
@@ -62,7 +66,7 @@ sub slugify {
 }
 sub timefmt {
 	my ($epoch,$context)=@_;
-	$epoch=str2time $epoch if $context eq 'readpost' or $context eq 'datetime';
+	$epoch=str2time $epoch if $epoch !~ /^[0-9]{10}$/;
 	my $dsuffix = 'th'; $dsuffix = 'st' if strftime("%d",localtime $epoch) eq '01'; $dsuffix = 'nd' if strftime("%d",localtime $epoch) eq '02';
 	return strftime "%A, %e$dsuffix %b. %Y", localtime $epoch if $context eq 'fancydate';
 	return strftime "%Y-%m-%dT%H:%M%z",localtime $epoch if $context eq 'datetime';
@@ -137,6 +141,7 @@ sub do_cache {
 	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for keys $blog->{links};
 	%defparams = (
 		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > 7? 7 : $#posts)]],
+		gentime => timefmt($lastcache, 'datetime'), version => $VERSION, generator => $ME, generatorurl => $ME_GH, host => $HOST,
 		about => $blog->{about}, author => $blog->{author}, name => $blog->{name}, tagline => $blog->{tagline}, keywords => $blog->{keywords},
 		robots => $blog->{config}->{indexable}? '<meta name="ROBOTS" content="INDEX, FOLLOW" />' : '<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />',
 	);
