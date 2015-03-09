@@ -67,7 +67,14 @@ h3.highlight  {
 	border:0;
 	border-radius:0;
 	border-bottom: 2px solid white;
-	box-shadow: 0px -1px 20px 8px rgba(255,255,255,0.25);
+	box-shadow: 0px -1px 20px 8px rgba(255,255,255,0.5);
+}
+footer {
+	background-color:#e8449f;
+	color:#ffffff;
+	border-top: 2px solid white;
+	box-shadow: 0px 9px 20px 8px rgba(255,255,255,0.5);
+	position: relative; bottom: 0;
 }
 .navbar-nav > li > a {
 	color:#fff;
@@ -88,7 +95,6 @@ h3.highlight  {
 .navbar-nav > .open > a, .navbar-nav > .open > a:hover, .navbar-nav > .open > a:focus {
 	color: #f0f0f0;
 	background-color:#fff;
-	opacity:.9;
 	border-color:#e8449f;
 }
 
