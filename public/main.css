@@ -70,11 +70,13 @@ h3.highlight  {
 	min-height: 48px; height: 48px;
 	box-shadow: 0px -1px 20px 8px rgba(0, 0, 0, 0.25);
 }
+.navbar-nav {
+	min-height: 48px; height: 48px;
+}
 .navbar-nav > li > a {
 	color:#fff;
 	padding-left:20px;
 	padding-right:20px;
-	min-height: 48px; height: 48px;
 	border-left:1px solid #d7338e;
 }
 .navbar-nav > li > a:hover, .navbar-nav > li > a:focus {
