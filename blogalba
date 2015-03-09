@@ -25,7 +25,6 @@ my $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/blogalba$//;
 my $cfg="$basedir/config";
 my $blog=YAML::LoadFile($cfg) or die "Couldn't load $cfg!";
 $blog->{url} .= '/' unless $blog->{url} =~ /\/$/;
-$blog->{links} = { sort { $b cmp $a } keys $blog->{links} };
 
 my ($page,@posts,@pages,%defparams);
 my $nposts=0;my $npages=1;my $lastcache=0;
@@ -138,7 +137,7 @@ sub do_cache {
 
 	my @nav;
 	push @nav, {navname => $_->{title}, navurl => "$blog->{url}$_->{filename}",} for @pages;
-	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for keys $blog->{links};
+	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for sort {$b cmp $a } keys $blog->{links};
 	%defparams = (
 		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > 7? 7 : $#posts)]],
 		gentime => timefmt($lastcache, 'datetime'), version => $VERSION, generator => $ME, generatorurl => $ME_GH, host => $HOST,
