@@ -128,7 +128,7 @@ sub do_cache {
 	opendir PAGES, "$basedir/pages/" or die "Couldn't open pages directory $basedir/pages/";
 	while(readdir PAGES) {
 		next unless /\.md$/;
-		warn "Error reading page $_\n" and next unless readpage("$basedir/pages/$_",2);
+		warn "Error reading page $_\n" and next unless readpost("$basedir/pages/$_",2);
 	}
 	closedir PAGES;
 
