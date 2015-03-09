@@ -90,10 +90,10 @@ h3.highlight  {
 	background-color:#fff;
 	border-color:#e8449f;
 }
-.nav > li > a {
+#sidebar > .nav > li > a {
 	padding: 6px 15px;
 }
-.nav > li:last-child > a {
+#sidebar > .nav > li:last-child > a {
 	padding-bottom: 12px;
 }
 .nav .open > a {
