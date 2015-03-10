@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 TITLE=`read -e -p 'Title of new post: '`
 TAGS=`read -e -p 'Tags for new post, comma-separated: '`
+DATE=`date '+%Y-%m-%d %H:%M'`
 FNAME="`date '+%Y%m%d'`.`echo "$TITLE"|tr -cd '[:alnum:]'`.md"
 cp posts/post.template posts/$FNAME
-[ -z "$EDITOR" ] && echo "EDITOR environment variable not set. Please set this to your preferred editor, or open $FNAME manually"
+perl -pi -e 's/^(title: )/$1\Q'$TITLE'\E//' posts/$FNAME
+perl -pi -e 's/^(date: )/$1\Q'$DATE'\E//' posts/$FNAME
+perl -pi -e 's/^(tags: )/$1\Q'$TAGS'\E//' posts/$FNAME
+[ -z "$EDITOR" ] && echo "EDITOR environment variable not set. Please set this to your preferred editor, or open $FNAME manually" && exit
 $EDITOR posts/$FNAME
