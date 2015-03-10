@@ -10,7 +10,9 @@
 		<a href="<TMPL_VAR NAME="generatorurl">"><TMPL_VAR NAME="generator"></a> + <a href="http://lighttpd.net">lighttpd</a> + <a href="http://freebsd.org">freebsd</a> + <a href="http://digitalocean.com">digitalocean</a><br />
 		Served by <TMPL_VAR NAME="host">, generated at <TMPL_VAR NAME="gentime">
 	</footer>
+	<!--
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	-->
 	</body>
 </html>
