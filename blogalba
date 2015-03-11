@@ -5,7 +5,6 @@ package App::BlogAlba;
 
 use strict;
 use warnings;
-use diagnostics;
 
 use Cwd;
 use HTML::Template;
