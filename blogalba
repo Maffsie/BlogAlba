@@ -5,7 +5,7 @@ package App::BlogAlba;
 
 use strict;
 use warnings;
-use feature qw/say/;
+use diagnostics;
 
 use Cwd;
 use HTML::Template;
