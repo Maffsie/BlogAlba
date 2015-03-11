@@ -163,7 +163,7 @@ sub do_cache {
 	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for sort {$b cmp $a } keys $blog->{links};
 	%defparams = (
 		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > ($blog->{rss_posts}-1)? ($blog->{rss_posts}-1) : $#posts)]],
-		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), generator => $ME, generatorurl => $ME_GH, host => $HOST,
+		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), host => $HOST,
 		about => $blog->{about}, author => $blog->{author}, name => $blog->{name}, tagline => $blog->{tagline}, keywords => $blog->{keywords},
 		robots => $blog->{config}->{indexable}? '<meta name="ROBOTS" content="INDEX, FOLLOW" />' : '<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />',
 	);
