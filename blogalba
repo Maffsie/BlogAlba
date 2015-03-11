@@ -140,7 +140,7 @@ sub generate_feed {
 }
 sub do_cache {
 	return if $lastcache > (time - 3600);
-	$lastcache = time;my $st=Time::HiRes::gettimeofday();
+	$lastcache = time;my @st=Time::HiRes::gettimeofday();
 	undef @posts;undef @pages;
 	opendir POSTS, "$basedir/posts/" or die "Couldn't open posts directory $basedir/posts/";
 	while(readdir POSTS) {
@@ -164,7 +164,7 @@ sub do_cache {
 	generate_feed;
 	%defparams = (
 		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > ($blog->{config}->{rss_posts}-1)? ($blog->{config}->{rss_posts}-1) : $#posts)]],
-		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), genworktime => Time::HiRes::tv_interval($st), host => $HOST,
+		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), genworktime => Time::HiRes::tv_interval(@st), host => $HOST,
 		about => $blog->{about}, author => $blog->{author}, name => $blog->{name}, tagline => $blog->{tagline}, keywords => $blog->{keywords},
 		robots => $blog->{config}->{indexable}? '<meta name="ROBOTS" content="INDEX, FOLLOW" />' : '<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />',
 	);
