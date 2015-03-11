@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use feature qw/say/;
 
-use File::Spec;
+use Cwd;
 use HTML::Template;
 use Text::MultiMarkdown qw/markdown/;
 use YAML;
@@ -19,11 +19,9 @@ use Unicode::Normalize;
 
 use Dancer2;
 
-my $ME = 'BlogAlba'; my $ME_GH = 'https://github.com/MaffC/BlogAlba/';
-my $VERSION = '0.6';
 my $HOST = `hostname -s`; chomp $HOST;
 
-my $basedir=File::Spec->rel2abs(__FILE__);$basedir=~s/blogalba$//;
+my $basedir=$ENV{BLOGALBA_DIR} || cwd();
 my $cfg="$basedir/config";
 my $blog=YAML::LoadFile($cfg) or die "Couldn't load $cfg!";
 $blog->{url} .= '/' unless $blog->{url} =~ /\/$/;
