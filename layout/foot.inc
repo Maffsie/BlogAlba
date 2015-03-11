@@ -8,7 +8,7 @@
 	</div>
 	<footer>
 		<a href="https://github.com/MaffC/BlogAlba">BlogAlba</a> + <a href="http://lighttpd.net">lighttpd</a> + <a href="http://freebsd.org">freebsd</a> + <a href="http://digitalocean.com">digitalocean</a><br />
-		Served by <TMPL_VAR NAME="host">, generated at <TMPL_VAR NAME="gentime"> (took <TMPL_VAR NAME="genworktime">)
+		Served by <TMPL_VAR NAME="host">, site generated at <TMPL_VAR NAME="gentime"> (took <TMPL_VAR NAME="genworktime">)
 	</footer>
 	<!--
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
