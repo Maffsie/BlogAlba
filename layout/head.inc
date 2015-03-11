@@ -12,6 +12,7 @@
 		<title><TMPL_VAR NAME="pagetitle"></title>
 		<TMPL_VAR NAME="robots">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<link rel="alternate" type="application/rss+xml" title="<TMPL_VAR NAME="title"> (RSS 2.0)" href="<TMPL_VAR NAME="url">/rss.rdf" />
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.2/custom/bootstrap.min.css" />
 		<link rel="stylesheet" href="/main.css" />
 	</head>

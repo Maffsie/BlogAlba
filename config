@@ -9,6 +9,7 @@ posturlprepend: wrote/
 config:
     indexable: 1
     per_page: 6
+	rss_excerpt: 1
     rss_posts: 8
     date_format: "%H:%M on %A, %d/%m/%y"
 links:

@@ -132,7 +132,7 @@ sub generate_feed {
 	$feed->add_item (
 		title			=> $_->{title},
 		link			=> $_->{permaurl},
-		description		=> $_->{excerpt},
+		description		=> ($blog->{config}->{rss_excerpt}? $_->{excerpt} : $_->{body}),
 		dc	=> { creator => $blog->{author}, },
 	) for @posts[0 .. ($#posts > ($blog->{config}->{rss_posts}-1)? ($blog->{config}->{rss_posts}-1) : $#posts)];
 	$feed->save("$basedir/public/rss.rdf");
@@ -159,7 +159,7 @@ sub do_cache {
 
 	my @nav;
 	push @nav, {navname => $_->{title}, navurl => "$blog->{url}$_->{filename}",} for @pages;
-	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for sort {$b cmp $a } keys $blog->{links};
+	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for sort { $b cmp $a } keys $blog->{links};
 	%defparams = (
 		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > ($blog->{config}->{rss_posts}-1)? ($blog->{config}->{rss_posts}-1) : $#posts)]],
 		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), host => $HOST,
