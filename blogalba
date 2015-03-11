@@ -135,7 +135,7 @@ sub generate_feed {
 		link			=> $_->{permaurl},
 		description		=> $_->{excerpt},
 		dc	=> { creator => $blog->{author}, },
-	) for @posts[0 .. ($#posts > ($blog->{rss_posts}-1)? ($blog->{rss_posts}-1) : $#posts)];
+	) for @posts[0 .. ($#posts > ($blog->{config}->{rss_posts}-1)? ($blog->{config}->{rss_posts}-1) : $#posts)];
 	$feed->save("$basedir/public/rss.rdf");
 }
 sub do_cache {
@@ -162,7 +162,7 @@ sub do_cache {
 	push @nav, {navname => $_->{title}, navurl => "$blog->{url}$_->{filename}",} for @pages;
 	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for sort {$b cmp $a } keys $blog->{links};
 	%defparams = (
-		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > ($blog->{rss_posts}-1)? ($blog->{rss_posts}-1) : $#posts)]],
+		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > ($blog->{config}->{rss_posts}-1)? ($blog->{config}->{rss_posts}-1) : $#posts)]],
 		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), host => $HOST,
 		about => $blog->{about}, author => $blog->{author}, name => $blog->{name}, tagline => $blog->{tagline}, keywords => $blog->{keywords},
 		robots => $blog->{config}->{indexable}? '<meta name="ROBOTS" content="INDEX, FOLLOW" />' : '<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />',
