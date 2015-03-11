@@ -135,7 +135,7 @@ sub generate_feed {
 		description		=> ($blog->{config}->{rss_excerpt}? $_->{excerpt} : $_->{body}),
 		dc	=> { creator => $blog->{author}, },
 	) for @posts[0 .. ($#posts > ($blog->{config}->{rss_posts}-1)? ($blog->{config}->{rss_posts}-1) : $#posts)];
-	$feed->save("$basedir/public/rss.rdf");
+	$feed->save("$basedir/public/feed-rss2.xml");
 }
 sub do_cache {
 	return if $lastcache > (time - 3600);
