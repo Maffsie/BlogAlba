@@ -15,6 +15,7 @@
 		<link rel="alternate" type="application/rss+xml" title="<TMPL_VAR NAME="title"> (RSS 2.0)" href="<TMPL_VAR NAME="url">/feed-rss2.xml" />
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.2/custom/bootstrap.min.css" />
 		<link rel="stylesheet" href="/main.css" />
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/solarized_dark.min.css" />
 	</head>
 	<body>
 	<nav class="navbar navbar-static">
