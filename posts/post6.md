@@ -19,24 +19,28 @@ Here's some benchmarks:
 
 Network speed:
 
-    ~ wget cachefly.cachefly.net/100mb.test -O /dev/null
-    --2012-04-28 02:34:32--  http://cachefly.cachefly.net/100mb.test
-    Resolving cachefly.cachefly.net... 140.99.94.175
-    Connecting to cachefly.cachefly.net|140.99.94.175|:80... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 104857600 (100M) [application/octet-stream]
-    Saving to: `/dev/null'
+```nohilight
+~ wget cachefly.cachefly.net/100mb.test -O /dev/null
+--2012-04-28 02:34:32--  http://cachefly.cachefly.net/100mb.test
+Resolving cachefly.cachefly.net... 140.99.94.175
+Connecting to cachefly.cachefly.net|140.99.94.175|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 104857600 (100M) [application/octet-stream]
+Saving to: `/dev/null'
 
-    100%[======>] 104,857,600 11.8M/s   in 8.7s
+100%[======>] 104,857,600 11.8M/s   in 8.7s
 
-    2012-04-28 02:34:41 (11.5 MB/s) - `/dev/null' saved [104857600/104857600]
+2012-04-28 02:34:41 (11.5 MB/s) - `/dev/null' saved [104857600/104857600]
+```
 
 Disk I/O:
 
-    ~ dd if=/dev/zero of=/tmp/disktest bs=64k count=16k
-    16384+0 records in
-    16384+0 records out
-    1073741824 bytes (1.1 GB) copied, 4.52632 s, 237 MB/s
+```nohilight
+~ dd if=/dev/zero of=/tmp/disktest bs=64k count=16k
+16384+0 records in
+16384+0 records out
+1073741824 bytes (1.1 GB) copied, 4.52632 s, 237 MB/s
+```
 
 ### **[Bhost][7]**
 
@@ -46,24 +50,28 @@ Their support is pretty great, considering they're a budget host, and the server
 
 Here's some benchmarks, since I still have a server with them: Network speed:
 
-    # wget cachefly.cachefly.net/100mb.test -O /dev/null
-    --2012-04-28 02:30:40--  http://cachefly.cachefly.net/100mb.test
-    Resolving cachefly.cachefly.net... 205.234.175.175
-    Connecting to cachefly.cachefly.net|205.234.175.175|:80... connected.
-    HTTP request sent, awaiting response... 200 OK
-    Length: 104857600 (100M) [application/octet-stream]
-    Saving to: `/dev/null'
+```nohilight
+# wget cachefly.cachefly.net/100mb.test -O /dev/null
+--2012-04-28 02:30:40--  http://cachefly.cachefly.net/100mb.test
+Resolving cachefly.cachefly.net... 205.234.175.175
+Connecting to cachefly.cachefly.net|205.234.175.175|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 104857600 (100M) [application/octet-stream]
+Saving to: `/dev/null'
 
-    100%[======>] 104,857,600 10.2M/s   in 9.8s
+100%[======>] 104,857,600 10.2M/s   in 9.8s
 
-    2012-04-28 02:30:49 (10.2 MB/s) - `/dev/null' saved [104857600/104857600]
+2012-04-28 02:30:49 (10.2 MB/s) - `/dev/null' saved [104857600/104857600]
+```
 
 Disk I/O:
 
-    # dd if=/dev/zero of=/tmp/disktest bs=64k count=16k
-    16384+0 records in
-    16384+0 records out
-    1073741824 bytes (1.1 GB) copied, 8.31944 s, 129 MB/s
+```nohilight
+# dd if=/dev/zero of=/tmp/disktest bs=64k count=16k
+16384+0 records in
+16384+0 records out
+1073741824 bytes (1.1 GB) copied, 8.31944 s, 129 MB/s
+```
 
 ### **[ThrustVPS][8]**
 
@@ -75,12 +83,12 @@ My main issues with ThrustVPS started in September, when I got an email stating 
 
 In summary, while the servers and prices themselves are good, uptime is a bit unpredictable, support is unpleasant and they seem to have a habit of restricting your server without explanation, or without supplying any actual evidence to back up their claims. I wouldn't recommend them to anyone.
 
-  [1]: http://thrustvps.com
-  [2]: http://linode.com
-  [3]: http://bhost.net
-  [4]: http://simplexwebs.com
-  [5]: http://vps6.net
-  [6]: http://www.simplexwebs.com
-  [7]: http://www.bhost.net
-  [8]: http://www.thrustvps.com
-  [9]: http://lowendbox.com
+[1]: http://thrustvps.com
+[2]: http://linode.com
+[3]: http://bhost.net
+[4]: http://simplexwebs.com
+[5]: http://vps6.net
+[6]: http://www.simplexwebs.com
+[7]: http://www.bhost.net
+[8]: http://www.thrustvps.com
+[9]: http://lowendbox.com
