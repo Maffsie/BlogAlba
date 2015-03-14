@@ -7,8 +7,8 @@
 		</div>
 	</div>
 	<footer>
-		<a href="https://github.com/MaffC/BlogAlba">BlogAlba</a> + <a href="http://lighttpd.net">lighttpd</a> + <a href="http://freebsd.org">freebsd</a> + <a href="http://digitalocean.com">digitalocean</a><br />
-		Served by <TMPL_VAR NAME="host">, site generated at <TMPL_VAR NAME="gentime"> (took <TMPL_VAR NAME="genworktime">)
+		<a href="https://github.com/MaffC/BlogAlba">BlogAlba</a> + <a href="http://nginx.org">nginx</a> + <a href="http://freebsd.org">freebsd</a> + <a href="http://digitalocean.com">digitalocean</a><br />
+		<span id="small">Served by <TMPL_VAR NAME="host">, site generated at <TMPL_VAR NAME="gentime"> (took <TMPL_VAR NAME="genworktime">)</span>
 	</footer>
 	<!--
 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

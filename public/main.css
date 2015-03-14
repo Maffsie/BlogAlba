@@ -113,6 +113,9 @@ footer {
 footer > a, footer > a:hover, footer > a:focus {
 	color: #eeffef;
 }
+footer > #small {
+	font-size: 11px;
+}
 .accordion-group {
 	border-width:0;
 }
