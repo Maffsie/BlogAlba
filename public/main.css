@@ -45,8 +45,11 @@ a:hover {
 	text-decoration: underline;
 }
 
-header > h1 {
+header h1 {
 	text-shadow: 0px 0px 3px rgba(0,0,0,1);
+}
+p > .lead {
+	text-shadow: 0px 0px 1px rgba(0,0,0,.5);
 }
 .highlight-bk {
 	background-color:#e8449f;
