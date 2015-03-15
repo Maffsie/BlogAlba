@@ -1,5 +1,4 @@
 ---
-layout: post
 title: UnrealIRCd and SANICK
 date: 2012-07-22 03:17:00
 tags: C, development, irc, servers, unrealircd
@@ -40,8 +39,7 @@ If this does not work, `/quote sanick TargetNick NewNick` should work. In irssi,
 
 The original source was written by Mouse, and was modified by myself in order for it to compile and function correctly. The "CHGNICK" function was removed. Parts of this module are copyright to Mouse and the UnrealIRCd dev team. I am not liable under any circumstance for any damage, service disruption or any other issues that may arise during the installation or use of this module. This module contains no malicious code and is freely downloadable and may be modified by anyone. This module is in use on at least one production IRC network, however no guarantees are made as to the module's stability. Use at your own risk. This module will not work on other IRCd's and may not work on older (3.2.8 or older) versions of UnrealIRCd.
 
-This module is an unofficial third-party module and is unsupported. However if you experience issues while compiling or using this module, please [email me][3] and I'll try to help as best I can.
+This module is an unofficial third-party module and is unsupported. However if you experience issues while compiling or using this module, please [email me](/about) and I'll try to help as best I can.
 
 [1]: https://pub.maff.scot/code/m_sanick.c
 [2]: http://scripts.irssi.org/scripts/dispatch.pl
-[3]: https://maff.scot/contact
