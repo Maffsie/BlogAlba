@@ -53,6 +53,7 @@ sub readpost {
 			| HOEDOWN_EXT_HIGHLIGHT
 			| HOEDOWN_EXT_SUPERSCRIPT
 			| HOEDOWN_EXT_NO_INTRA_EMPHASIS);
+	$postm{mdsource} = $postb;
 	undef $postb;
 	if (defined $postm{date}) {
 		$postm{slug} = slugify($postm{title}) unless $postm{slug}; #we allow custom slugs to be defined
@@ -200,16 +201,24 @@ get '/page/:id' => sub {
 	return paginate params->{id};
 };
 get '/wrote/:yyyy/:mm/:slug' => sub {
-	pass unless params->{yyyy} =~ /^[0-9]{4}$/ and params->{mm} =~ /^(?:0[1-9]|1[0-2])$/ and params->{slug} =~ /^[a-z0-9\-]+$/i;
+	pass unless params->{yyyy} =~ /^[0-9]{4}$/ and params->{mm} =~ /^(?:0[1-9]|1[0-2])$/ and params->{slug} =~ /^[a-z0-9\-]+(?:\.md)?$/i;
+	$page->param(SOURCEVIEW => 1) if params->{slug} =~ /\.md$/;
 	$page->param(ISPOST => 1);
 	get_post params->{yyyy}, params->{mm}, params->{slug} or pass;
 	return $page->output;
 };
 get '/:extpage' => sub {
-	pass unless params->{extpage} =~ /^[a-z0-9\-]+$/i;
+	pass unless params->{extpage} =~ /^[a-z0-9\-]+(?:\.md)?$/i;
+	$page->param(SOURCEVIEW => 1) if params->{extpage} =~ /\.md$/;
 	$page->param(ISPOST => 0);
 	get_page params->{extpage} or pass;
 	return $page->output;
+};
+# 404
+any qr{.*} => sub {
+	return redirect '/' if request->path =~ /index(?:\.(?:htm|p)l?)?$/;
+	status 'not_found';
+	return redirect '/404.html';
 };
 
 start;
