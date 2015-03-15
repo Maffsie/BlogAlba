@@ -202,14 +202,14 @@ get '/page/:id' => sub {
 };
 get '/wrote/:yyyy/:mm/:slug' => sub {
 	pass unless params->{yyyy} =~ /^[0-9]{4}$/ and params->{mm} =~ /^(?:0[1-9]|1[0-2])$/ and params->{slug} =~ /^[a-z0-9\-]+(?:\.md)?$/i;
-	$page->param(SOURCEVIEW => 1) and header('Content-Type' => 'text/plain') if params->{slug} =~ s/\.md$//;
+	if (params->{slug} =~ s/\.md$//) { $page->param(SOURCEVIEW => 1); header('Content-Type' => 'text/plain'); }
 	$page->param(ISPOST => 1);
 	get_post params->{yyyy}, params->{mm}, params->{slug} or pass;
 	return $page->output;
 };
 get '/:extpage' => sub {
 	pass unless params->{extpage} =~ /^[a-z0-9\-]+(?:\.md)?$/i;
-	$page->param(SOURCEVIEW => 1) and header('Content-Type' => 'text/plain') if params->{extpage} =~ s/\.md$//;
+	if (params->{extpage} =~ s/\.md$//) { $page->param(SOURCEVIEW => 1); header('Content-Type' => 'text/plain'); }
 	$page->param(ISPOST => 0);
 	get_page params->{extpage} or pass;
 	return $page->output;
