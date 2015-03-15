@@ -8,7 +8,7 @@ use warnings;
 
 use Cwd;
 use HTML::Template;
-use Text::MultiMarkdown qw/markdown/;
+use Text::Markdown::Hoedown;
 use YAML;
 
 use POSIX qw/strftime/;
@@ -42,7 +42,18 @@ sub readpost {
 	close POST; undef $status;
 	my %postm = %{YAML::Load($postmm)}; undef $postmm;
 	$postm{filename} = $1 if $file =~ /(?:^|\/)([a-zA-Z0-9\-]*)\.md$/;
-	$postm{body} = markdown($postb); undef $postb;
+	$postm{body} = markdown(
+		$postb,
+		extensions => HOEDOWN_EXT_TABLES
+			| HOEDOWN_EXT_FENCED_CODE
+			| HOEDOWN_EXT_FOOTNOTES
+			| HOEDOWN_EXT_AUTOLINK
+			| HOEDOWN_EXT_STRIKETHROUGH
+			| HOEDOWN_EXT_UNDERLINE
+			| HOEDOWN_EXT_HIGHLIGHT
+			| HOEDOWN_EXT_SUPERSCRIPT
+			| HOEDOWN_EXT_NO_INTRA_EMPHASIS);
+	undef $postb;
 	if (defined $postm{date}) {
 		$postm{slug} = slugify($postm{title}) unless $postm{slug}; #we allow custom slugs to be defined
 		$postm{hastags} = 1 unless not defined $postm{tags};
