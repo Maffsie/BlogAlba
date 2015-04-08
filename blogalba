@@ -219,7 +219,7 @@ get '/:extpage' => sub {
 any qr{.*} => sub {
 	return redirect '/' if request->path =~ /index(?:\.(?:html?|pl)?)?$/;
 	status 'not_found';
-	return redirect '/404.html';
+	#return redirect '/404.html'; # this doesn't actually work, need to find a better way of 404ing using nginx's 404 page
 };
 
 start;
