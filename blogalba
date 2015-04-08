@@ -127,6 +127,7 @@ sub get_page {
 	return undef;
 }
 sub generate_feed {
+	return unless $blog->{config}->{rss_publish};
 	my $feed = new XML::RSS(version => '2.0');
 	$feed->channel (
 		title			=> $blog->{name},
