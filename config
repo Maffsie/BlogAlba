@@ -10,7 +10,7 @@ config:
     indexable: 1
     per_page: 6
     recent_posts: 8
-	rss_publish: 1
+    rss_publish: 1
     rss_excerpt: 1
     date_format: "%H:%M on %A, %d/%m/%y"
 links:
