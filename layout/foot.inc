@@ -7,7 +7,7 @@
 		</div>
 	</div>
 	<footer>
-		<a href="https://github.com/MaffC/BlogAlba">BlogAlba</a> + <a href="http://nginx.org">nginx</a> + <a href="http://freebsd.org">freebsd</a> + <a href="http://digitalocean.com">digitalocean</a><br />
+		<a href="https://github.com/MaffC/BlogAlba">BlogAlba</a> + <a href="http://nginx.org">nginx</a> + <a href="http://freebsd.org">freebsd</a> + <a href="https://ip-projects.de">ip-projects servers</a><br />
 		<span id="small">Served by <TMPL_VAR NAME="host">, site generated at <TMPL_VAR NAME="gentime"> (took <TMPL_VAR NAME="genworktime">)</span>
 	</footer>
 	<!-- Code block syntax highlighting. -->
