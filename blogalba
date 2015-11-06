@@ -154,7 +154,7 @@ sub generate_feed {
 sub do_cache {
 	return if $lastcache > (time - 3600);
 	$lastcache = time;my $st=[gettimeofday];
-	undef @posts;undef @pages;
+	undef @posts;undef @pages;$nposts=0;
 	opendir POSTS, "$basedir/posts/" or die "Couldn't open posts directory $basedir/posts/";
 	while(readdir POSTS) {
 		next unless /\.md$/;
