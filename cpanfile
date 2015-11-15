@@ -8,3 +8,4 @@ requires 'Date::Parse';
 requires 'Time::HiRes';
 
 requires 'Dancer2';
+requires 'Starman';
