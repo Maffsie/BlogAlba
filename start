@@ -1,5 +1,5 @@
 #!/bin/sh
-[ -z "$BASE" ] && BASE=/usr/home/sites
+[ -z "$BASE$APP" ] && exit 1
 #p5env setup
 PATH="$BASE/perl5/bin${PATH+:}${PATH}"; export PATH;
 PERL5LIB="$BASE/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
@@ -9,4 +9,4 @@ PERL_MM_OPT="INSTALL_BASE=$BASE/perl5"; export PERL_MM_OPT;
 
 pkill -F $BASE/${APP}.pid 2>/dev/null
 for((;;));do pkill -0 -F $BASE/${APP}.pid 2>/dev/null || break; sleep 1; done
-plackup -s Starman -D -S $BASE/$APP/.sock $BASE/$APP/app.psgi --pid $BASE/${APP}.pid --workers 1
+plackup -s Starman -D -S $BASE/$APP/.sock $BASE/$APP/app.psgi --pid $BASE/${APP}.pid $START_OPTS
