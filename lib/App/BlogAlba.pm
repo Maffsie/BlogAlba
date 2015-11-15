@@ -1,6 +1,3 @@
-#!/usr/bin/env perl
-# BlogAlba - no-frills markdown blogging system
-
 package App::BlogAlba;
 
 use strict;
@@ -9,7 +6,6 @@ use warnings;
 use Cwd;
 use HTML::Template;
 use Text::Markdown::Hoedown;
-use YAML;
 
 use POSIX qw/strftime/;
 use Date::Parse qw/str2time/; #Required for converting the date field in posts to something strftime can work with
@@ -22,9 +18,7 @@ use Dancer2;
 my $HOST = `hostname -s`; chomp $HOST;
 
 my $basedir=$ENV{BLOGALBA_DIR} || cwd();
-my $cfg="$basedir/config";
-my $blog=YAML::LoadFile($cfg) or die "Couldn't load $cfg!";
-$blog->{url} .= '/' unless $blog->{url} =~ /\/$/;
+config->{url} .= '/' unless config->{url} =~ /\/$/;
 
 my ($page,@posts,@pages,%defparams);
 my $nposts=0;my $npages=1;my $lastcache=0;
@@ -62,7 +56,7 @@ sub readpost {
 		$postm{time} = str2time($postm{date});
 		$postm{fancy} = timefmt($postm{time},'fancydate');
 		$postm{datetime} = timefmt($postm{date},'datetime');
-		$postm{permaurl} = $blog->{url}.$blog->{posturlprepend}.timefmt($postm{time},'permalink').$postm{slug};
+		$postm{permaurl} = config->{url}.config->{posturlprepend}.timefmt($postm{time},'permalink').$postm{slug};
 	}
 	push @posts,{%postm} if $psh==1; push @pages,{%postm} if $psh==2;return %postm;
 }
@@ -84,23 +78,23 @@ sub timefmt {
 	return strftime "%Y-%m",localtime $epoch if $context eq 'writepost';
 	return strftime "%Y/%m/",localtime $epoch if $context eq 'permalink';
 	return strftime $context, localtime $epoch if $context;
-	return strftime $blog->{config}->{date_format},localtime $epoch;
+	return strftime config->{conf}->{date_format},localtime $epoch;
 }
 sub pagination_calc {
-	my $rem=$nposts % $blog->{config}->{per_page};
-	$npages=($nposts-$rem)/$blog->{config}->{per_page};
+	my $rem=$nposts % config->{conf}->{per_page};
+	$npages=($nposts-$rem)/config->{conf}->{per_page};
 	$npages++ if $rem>0 or $npages<1;
 }
 sub get_index {
 	my @iposts = @_;
-	$page->param(pagetitle => $blog->{name}, INDEX => 1, POSTS => [@iposts]);
+	$page->param(pagetitle => config->{name}, INDEX => 1, POSTS => [@iposts]);
 	return $page->output;
 }
 sub paginate {
-	my $pagenum = shift; my $offset = ($pagenum-1)*$blog->{config}->{per_page};
-	my $offset_to = $offset+($blog->{config}->{per_page}-1); $offset_to = $#posts if $offset_to > $#posts;
+	my $pagenum = shift; my $offset = ($pagenum-1)*config->{conf}->{per_page};
+	my $offset_to = $offset+(config->{conf}->{per_page}-1); $offset_to = $#posts if $offset_to > $#posts;
 	$page->param(PAGINATED => 1, prevlink => ($pagenum>1? 1 : 0), prevpage => $pagenum-1, nextlink => ($pagenum<$npages? 1 : 0), nextpage => $pagenum+1);
-	return get_index @posts[$offset..(($offset+$blog->{config}->{per_page})>$#posts? $#posts : ($offset+($blog->{config}->{per_page}-1)))];
+	return get_index @posts[$offset..(($offset+config->{conf}->{per_page})>$#posts? $#posts : ($offset+(config->{conf}->{per_page}-1)))];
 }
 sub page_init {
 	$page = HTML::Template->new(filename => "$basedir/layout/base.html",die_on_bad_params => 0,utf8 => 1,global_vars => 1);
@@ -111,7 +105,7 @@ sub get_post {
 	for my $r (@posts) {
 		my %post = %$r;
 		next unless $post{slug} eq $slug and timefmt($post{time},'writepost') eq "$y-$m";
-		$page->param(pagetitle => "$post{title} - $blog->{name}",%post);
+		$page->param(pagetitle => $post{title}." - ".config->{name},%post);
 		return 1;
 	}
 	return undef;
@@ -121,21 +115,21 @@ sub get_page {
 	for my $r (@pages) {
 		my %cpage = %$r;
 		next unless $cpage{filename} eq $pname;
-		$page->param(pagetitle => "$cpage{title} - $blog->{name}",%cpage);
+		$page->param(pagetitle => $cpage{title}" - ".config->{name},%cpage);
 		return 1;
 	}
 	return undef;
 }
 sub generate_feed {
-	return unless $blog->{config}->{rss_publish};
+	return unless config->{conf}->{rss_publish};
 	my $feed = new XML::RSS(version => '2.0');
 	$feed->channel (
-		title			=> $blog->{name},
-		link			=> $blog->{url},
-		description		=> $blog->{tagline},
+		title			=> config->{name},
+		link			=> config->{url},
+		description		=> config->{tagline},
 		dc	=> {
-			creator		=> $blog->{author},
-			language	=> "en-gb",
+			creator		=> config->{author},
+			language	=> config->{locale},
 		},
 		syn	=> {
 			updatePeriod	=> "daily",
@@ -146,9 +140,9 @@ sub generate_feed {
 	$feed->add_item (
 		title			=> $_->{title},
 		link			=> $_->{permaurl},
-		description		=> ($blog->{config}->{rss_excerpt}? $_->{excerpt} : $_->{body}),
-		dc	=> { creator => $blog->{author}, },
-	) for @posts[0 .. ($#posts > ($blog->{config}->{recent_posts}-1)? ($blog->{config}->{recent_posts}-1) : $#posts)];
+		description		=> (config->{conf}->{rss_excerpt}? $_->{excerpt} : $_->{body}),
+		dc	=> { creator => config->{author}, },
+	) for @posts[0 .. ($#posts > (config->{conf}->{recent_posts}-1)? (config->{conf}->{recent_posts}-1) : $#posts)];
 	$feed->save("$basedir/public/feed-rss2.xml");
 }
 sub do_cache {
@@ -172,20 +166,17 @@ sub do_cache {
 	closedir PAGES;
 
 	my @nav;
-	push @nav, {navname => $_->{title}, navurl => "$blog->{url}$_->{filename}",} for @pages;
-	push @nav, {navname => $_, navurl => $blog->{links}->{$_},} for sort { $b cmp $a } keys $blog->{links};
+	push @nav, {navname => $_->{title}, navurl => config->{url}.$_->{filename},} for @pages;
+	push @nav, {navname => $_, navurl => config->{links}->{$_},} for sort { $b cmp $a } keys config->{links};
 	generate_feed;
 	%defparams = (
-		INDEX => 0, NAV => [@nav], url => $blog->{url}, recent => [@posts[0 .. ($#posts > ($blog->{config}->{recent_posts}-1)? ($blog->{config}->{recent_posts}-1) : $#posts)]],
-		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), genworktime => sprintf("%.2f ms", tv_interval($st)*100), host => $HOST, rss_enabled => $blog->{rss_publish},
-		about => $blog->{about}, author => $blog->{author}, name => $blog->{name}, tagline => $blog->{tagline}, keywords => $blog->{keywords},
-		robots => $blog->{config}->{indexable}? '<meta name="ROBOTS" content="INDEX, FOLLOW" />' : '<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />',
+		INDEX => 0, NAV => [@nav], url => config->{url}, recent => [@posts[0 .. ($#posts > (config->{conf}->{recent_posts}-1)? (config->{conf}->{recent_posts}-1) : $#posts)]],
+		gentime => timefmt($lastcache, '%H:%M %e/%-m/%y %Z'), genworktime => sprintf("%.2f ms", tv_interval($st)*100), host => $HOST, rss_enabled => config->{rss_publish},
+		about => config->{about}, author => config->{author}, name => config->{name}, tagline => config->{tagline}, keywords => config->{keywords},
+		robots => config->{conf}->{indexable}? '<meta name="ROBOTS" content="INDEX, FOLLOW" />' : '<meta name="ROBOTS" content="NOINDEX, NOFOLLOW" />',
 	);
 	pagination_calc;
 }
-
-set server => '127.0.0.1';
-set port => 42069;
 
 hook 'before' => sub {
 	do_cache;
@@ -216,10 +207,10 @@ get '/:extpage' => sub {
 	return $page->output;
 };
 # 404
-any qr{.*} => sub {
+any qr/.*/ => sub {
 	return redirect '/' if request->path =~ /index(?:\.(?:html?|pl)?)?$/;
-	status 'not_found';
-	#return redirect '/404.html'; # this doesn't actually work, need to find a better way of 404ing using nginx's 404 page
+	return send_error('The page you seek cannot be found.', 404);
 };
 
-start;
+1;
+__END__
