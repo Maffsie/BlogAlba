@@ -5,6 +5,7 @@ locale: "en_GB"
 
 logger: "console"
 log: "debug"
+startup_info: 1
 
 # Uncomment for debugging
 #show_errors: 1
