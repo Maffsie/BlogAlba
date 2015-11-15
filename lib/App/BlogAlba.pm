@@ -17,7 +17,7 @@ use Dancer2;
 
 my $HOST = `hostname -s`; chomp $HOST;
 
-my $basedir=$ENV{BLOGALBA_DIR} || cwd();
+my $basedir=$ENV{BASE}."/".$ENV{APP} || cwd();
 config->{url} .= '/' unless config->{url} =~ /\/$/;
 
 my ($page,@posts,@pages,%defparams);
