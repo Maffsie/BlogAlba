@@ -5,5 +5,4 @@ use FindBin;
 use lib "$FindBin::Bin/lib";
 
 use App::BlogAlba;
-
 App::BlogAlba->start;
