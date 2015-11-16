@@ -3,20 +3,20 @@ charset: "UTF-8"
 tz: "Europe/London"
 locale: "en_GB"
 
-logger: "file"
+logger: "console"
 log: "debug"
 
 # Uncomment for debugging
-show_errors: 1
+#show_errors: 1
 
 #Blog configuration
-url: "https://maff.scot/"
-name: "colourful words and phrases"
-tagline: "techy tangents and general life chatter from a tired sysadmin."
-author: "Maff"
-about: "A dorky dude who spends too much time with perl."
+url: https://maff.scot/
+name: colourful words and phrases
+tagline: techy tangents and general life chatter from a tired sysadmin.
+author: Maff
+about: A dorky dude who spends too much time with perl.
 keywords: "sysadmin,unix,bsd,freebsd,linux,software,web,developer,perl,bash,shell,gentoo,maff,matthew,connelly,dundee,scotland,furry,blog"
-posturlprepend: "wrote/"
+posturlprepend: wrote/
 conf:
   indexable: 1
   per_page: 6
@@ -25,5 +25,5 @@ conf:
   rss_excerpt: 1
   date_format: "%H:%M on %A, %d/%m/%y"
 links:
-  Twitter: "https://twitter.com/maffsie"
-  Github: "https://github.com/Maffsie"
+  Twitter: https://twitter.com/maffsie
+  Github: https://github.com/Maffsie
