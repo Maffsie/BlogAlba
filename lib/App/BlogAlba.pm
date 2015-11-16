@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Cwd;
+# TODO: maybe swap this out for templating stuff through dancer, would be cleaner.
 use HTML::Template;
 use Text::Markdown::Hoedown;
 
