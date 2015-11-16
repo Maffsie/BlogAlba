@@ -3,7 +3,7 @@ charset: "UTF-8"
 tz: "Europe/London"
 locale: "en_GB"
 
-logger: "console"
+logger: "file"
 log: "debug"
 startup_info: 1
 
