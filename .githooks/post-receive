@@ -5,5 +5,4 @@ START_OPTS="--workers 1"; export START_OPTS
 git --git-dir $BASE/$APP/.git --work-tree $BASE/$APP pull
 git --git-dir $BASE/$APP.mirror.git fetch
 git --git-dir $BASE/$APP.mirror.git push
-[ ! -z "$(find $BASE/$APP -type d -name .git -prune -o -type f -mmin -1 -print|egrep '(p(ost|age)s/|lib$)')" ] || exit
 echo "Restarting $APP"; $BASE/$APP/start
