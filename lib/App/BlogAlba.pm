@@ -116,7 +116,7 @@ sub get_page {
 	for my $r (@pages) {
 		my %cpage = %$r;
 		next unless $cpage{filename} eq $pname;
-		$page->param(pagetitle => $cpage{title}" - ".config->{name},%cpage);
+		$page->param(pagetitle => $cpage{title}." - ".config->{name},%cpage);
 		return 1;
 	}
 	return undef;
