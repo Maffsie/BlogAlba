@@ -7,7 +7,7 @@ logger: "file"
 log: "debug"
 
 # Uncomment for debugging
-#show_errors: 1
+show_errors: 1
 
 #Blog configuration
 url: "https://maff.scot/"
