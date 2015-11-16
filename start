@@ -1,4 +1,8 @@
 #!/bin/sh
+#Application options
+START_OPTS="--workers 1"
+
+#Standard startup script
 [ -z "$BASE$APP" ] && exit 1
 #p5env setup
 PATH="$BASE/perl5/bin${PATH+:}${PATH}"; export PATH;
