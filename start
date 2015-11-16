@@ -9,4 +9,4 @@ PERL_MM_OPT="INSTALL_BASE=$BASE/perl5"; export PERL_MM_OPT;
 
 pkill -F $BASE/${APP}.pid 2>/dev/null
 for((;;));do pkill -0 -F $BASE/${APP}.pid 2>/dev/null || break; sleep 1; done
-plackup -s Starman -D -S $BASE/$APP/.sock $BASE/$APP/app.psgi --pid $BASE/${APP}.pid $START_OPTS
+plackup -s Starman -D -S $BASE/$APP/.sock -a $BASE/$APP/app.psgi --pid $BASE/${APP}.pid $START_OPTS
