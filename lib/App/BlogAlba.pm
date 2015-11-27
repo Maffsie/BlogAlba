@@ -13,6 +13,7 @@ use Date::Parse qw/str2time/; #Required for converting the date field in posts t
 use Time::HiRes qw/gettimeofday tv_interval/;
 use XML::RSS;
 use Unicode::Normalize;
+use YAML; #Required for loading post-specific information from posts
 
 use Dancer2;
 
@@ -26,6 +27,7 @@ my $nposts=0;my $npages=1;my $lastcache=0;
 
 sub readpost {
 	my $file = shift;my $psh = shift || 1;
+	my %post;
 	my $postb = ""; my $postmm = "";
 	open POST, $file or warn "Couldn't open $file!" and return 0;
 	my $status = 0;
@@ -35,9 +37,9 @@ sub readpost {
 		$postmm .= $_ if $status==1;
 	}
 	close POST; undef $status;
-	my %postm = %{YAML::Load($postmm)}; undef $postmm;
-	$postm{filename} = $1 if $file =~ /(?:^|\/)([a-zA-Z0-9\-]*)\.md$/;
-	$postm{body} = markdown(
+	%post = %{YAML::Load($postmm)}; undef $postmm;
+	$post{filename} = $1 if $file =~ /(?:^|\/)([a-zA-Z0-9\-]*)\.md$/;
+	$post{body} = markdown(
 		$postb,
 		extensions => HOEDOWN_EXT_TABLES
 			| HOEDOWN_EXT_FENCED_CODE
@@ -48,18 +50,18 @@ sub readpost {
 			| HOEDOWN_EXT_HIGHLIGHT
 			| HOEDOWN_EXT_SUPERSCRIPT
 			| HOEDOWN_EXT_NO_INTRA_EMPHASIS);
-	$postm{mdsource} = $postb;
+	$post{mdsource} = $postb;
 	undef $postb;
-	if (defined $postm{date}) {
-		$postm{slug} = slugify($postm{title}) unless $postm{slug}; #we allow custom slugs to be defined
-		$postm{hastags} = 1 unless not defined $postm{tags};
-		$postm{excerpt} = $1 if $postm{body} =~ /(<p>.*?<\/p>)/s;
-		$postm{time} = str2time($postm{date});
-		$postm{fancy} = timefmt($postm{time},'fancydate');
-		$postm{datetime} = timefmt($postm{date},'datetime');
-		$postm{permaurl} = config->{url}.config->{posturlprepend}.timefmt($postm{time},'permalink').$postm{slug};
+	if (defined $post{date}) {
+		$post{slug} = slugify($post{title}) unless $post{slug}; #we allow custom slugs to be defined
+		$post{hastags} = 1 unless not defined $post{tags};
+		$post{excerpt} = $1 if $post{body} =~ /(<p>.*?<\/p>)/s;
+		$post{time} = str2time($post{date});
+		$post{fancy} = timefmt($post{time},'fancydate');
+		$post{datetime} = timefmt($post{date},'datetime');
+		$post{permaurl} = config->{url}.config->{posturlprepend}.timefmt($post{time},'permalink').$post{slug};
 	}
-	push @posts,{%postm} if $psh==1; push @pages,{%postm} if $psh==2;return %postm;
+	push @posts,{%post} if $psh==1; push @pages,{%post} if $psh==2;return %post;
 }
 sub slugify {
 	my $t = shift;
