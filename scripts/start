@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-pkill -F /home/sites/blogalba.pid 2>/dev/null
-BLOGALBA_DIR="/home/sites/blogalba/" plackup -s Starman -D -p 42069 /home/sites/blogalba/blogalba --pid /home/sites/blogalba.pid

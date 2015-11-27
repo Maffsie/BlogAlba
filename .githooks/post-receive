@@ -1,4 +1,7 @@
 #!/bin/sh
 cat > /dev/null
-git --git-dir /home/sites/blogalba/.git --work-tree /home/sites/blogalba pull
-[ ! -z "$(find /home/sites/blogalba -type d -name .git -prune -o -type f -mmin -1 -print|egrep '(p(ost|age)s/|blogalba$)')" ] && echo "Restarting blogalba" && /home/sites/blogalba/scripts/start
+BASE=/usr/home/sites; export BASE; APP=blogalba; export APP
+git --git-dir $BASE/$APP/.git --work-tree $BASE/$APP pull
+git --git-dir $BASE/$APP.mirror.git fetch
+git --git-dir $BASE/$APP.mirror.git push
+echo "Restarting $APP"; $BASE/$APP/start

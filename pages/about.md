@@ -17,11 +17,11 @@ Contact information:
 - irc: Maff @ [Freenode][7] and [EntropyNet][8]
 
 [1]: https://www.ipxcore.com/
-[2]: https://github.com/MaffC/
+[2]: https://github.com/Maffsie/
 [3]: http://munin-monitoring.org/
-[4]: https://github.com/MaffC/openwrt-munin-node/
-[5]: https://github.com/MaffC/ayudante-lobo/
-[6]: https://github.com/MaffC/BlogAlba/
+[4]: https://github.com/Maffsie/openwrt-munin-node/
+[5]: https://github.com/Maffsie/ayudante-lobo/
+[6]: https://github.com/Maffsie/BlogAlba/
 [7]: https://freenode.net/
 [8]: https://entropynet.net/
 [9]: http://pgp.mit.edu:11371/pks/lookup?op=get&search=0x7B8A457D282B7CB6

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 read -ep 'Title of new post: ' TITLE
 read -ep 'Tags for new post, comma-separated: ' TAGS
 DATE=`date '+%Y-%m-%d %H:%M'`
