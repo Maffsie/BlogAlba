@@ -3,86 +3,20 @@ package App::BlogAlba;
 use strict;
 use warnings;
 
-use Cwd;
-# TODO: maybe swap this out for templating stuff through dancer, would be cleaner.
-use HTML::Template;
-use Text::Markdown::Hoedown;
+use App::BlogAlba::Article;
+use Data::Paginated;
 
-use POSIX qw/strftime/;
-use Date::Parse qw/str2time/; #Required for converting the date field in posts to something strftime can work with
 use Time::HiRes qw/gettimeofday tv_interval/;
-use XML::RSS;
-use Unicode::Normalize;
-use YAML; #Required for loading post-specific information from posts
+
+use Sys::Hostname;
+my $HOST = hostname; $HOST =~ s/\..*$//;
 
 use Dancer2;
+use Dancer2::Plugin::Feed;
 
-my $HOST = `hostname -s`; chomp $HOST;
+#Sanitise our base URL
+config->{url} =~ /\/$/ or config->{url} .= '/';
 
-my $basedir=$ENV{BASE}."/".$ENV{APP} || cwd();
-config->{url} .= '/' unless config->{url} =~ /\/$/;
-
-my ($page,@posts,@pages,%defparams);
-my $nposts=0;my $npages=1;my $lastcache=0;
-
-sub readpost {
-	my $file = shift;my $psh = shift || 1;
-	my %post;
-	my $postb = ""; my $postmm = "";
-	open POST, $file or warn "Couldn't open $file!" and return 0;
-	my $status = 0;
-	while (<POST>) {
-		$postb .= $_ if $status==2;
-		/^-{3,}$/ and not $status==2 and $status = $status==1? 2 : 1;
-		$postmm .= $_ if $status==1;
-	}
-	close POST; undef $status;
-	%post = %{YAML::Load($postmm)}; undef $postmm;
-	$post{filename} = $1 if $file =~ /(?:^|\/)([a-zA-Z0-9\-]*)\.md$/;
-	$post{body} = markdown(
-		$postb,
-		extensions => HOEDOWN_EXT_TABLES
-			| HOEDOWN_EXT_FENCED_CODE
-			| HOEDOWN_EXT_FOOTNOTES
-			| HOEDOWN_EXT_AUTOLINK
-			| HOEDOWN_EXT_STRIKETHROUGH
-			| HOEDOWN_EXT_UNDERLINE
-			| HOEDOWN_EXT_HIGHLIGHT
-			| HOEDOWN_EXT_SUPERSCRIPT
-			| HOEDOWN_EXT_NO_INTRA_EMPHASIS);
-	$post{mdsource} = $postb;
-	undef $postb;
-	if (defined $post{date}) {
-		$post{slug} = slugify($post{title}) unless $post{slug}; #we allow custom slugs to be defined
-		$post{hastags} = 1 unless not defined $post{tags};
-		$post{excerpt} = $1 if $post{body} =~ /(<p>.*?<\/p>)/s;
-		$post{time} = str2time($post{date});
-		$post{fancy} = timefmt($post{time},'fancydate');
-		$post{datetime} = timefmt($post{date},'datetime');
-		$post{permaurl} = config->{url}.config->{posturlprepend}.timefmt($post{time},'permalink').$post{slug};
-	}
-	push @posts,{%post} if $psh==1; push @pages,{%post} if $psh==2;return %post;
-}
-sub slugify {
-	my $t = shift;
-	$t = lc NFKD($t); #Unicode::Normalize
-	$t =~ tr/\000-\177//cd; #Strip non-ascii
-	$t =~ s/[^\w\s-]//g; #Strip non-words
-	chomp $t;
-	$t =~ s/[-\s]+/-/g; #Prevent multiple hyphens or any spaces
-	return $t;
-}
-sub timefmt {
-	my ($epoch,$context)=@_;
-	$epoch=str2time $epoch if $epoch !~ /^[0-9]{10}$/;
-	my $dsuffix = 'th'; $dsuffix = 'st' if strftime("%d",localtime $epoch) =~ /1$/; $dsuffix = 'nd' if strftime("%d",localtime $epoch) =~ /2$/;
-	return strftime "%A, %e$dsuffix %b. %Y", localtime $epoch if $context eq 'fancydate';
-	return strftime "%Y-%m-%dT%H:%M%z",localtime $epoch if $context eq 'datetime';
-	return strftime "%Y-%m",localtime $epoch if $context eq 'writepost';
-	return strftime "%Y/%m/",localtime $epoch if $context eq 'permalink';
-	return strftime $context, localtime $epoch if $context;
-	return strftime config->{conf}->{date_format},localtime $epoch;
-}
 sub pagination_calc {
 	my $rem=$nposts % config->{conf}->{per_page};
 	$npages=($nposts-$rem)/config->{conf}->{per_page};
@@ -98,10 +32,6 @@ sub paginate {
 	my $offset_to = $offset+(config->{conf}->{per_page}-1); $offset_to = $#posts if $offset_to > $#posts;
 	$page->param(PAGINATED => 1, prevlink => ($pagenum>1? 1 : 0), prevpage => $pagenum-1, nextlink => ($pagenum<$npages? 1 : 0), nextpage => $pagenum+1);
 	return get_index @posts[$offset..(($offset+config->{conf}->{per_page})>$#posts? $#posts : ($offset+(config->{conf}->{per_page}-1)))];
-}
-sub page_init {
-	$page = HTML::Template->new(filename => "$basedir/layout/base.html",die_on_bad_params => 0,utf8 => 1,global_vars => 1);
-	$page->param(%defparams);
 }
 sub get_post {
 	my ($y,$m,$slug) = @_;
@@ -122,31 +52,6 @@ sub get_page {
 		return 1;
 	}
 	return undef;
-}
-sub generate_feed {
-	return unless config->{conf}->{rss_publish};
-	my $feed = new XML::RSS(version => '2.0');
-	$feed->channel (
-		title			=> config->{name},
-		link			=> config->{url},
-		description		=> config->{tagline},
-		dc	=> {
-			creator		=> config->{author},
-			language	=> config->{locale},
-		},
-		syn	=> {
-			updatePeriod	=> "daily",
-			updateFrequency	=> "1",
-			updateBase		=> "1970-01-01T00:00+00:00",
-		},
-	);
-	$feed->add_item (
-		title			=> $_->{title},
-		link			=> $_->{permaurl},
-		description		=> (config->{conf}->{rss_excerpt}? $_->{excerpt} : $_->{body}),
-		dc	=> { creator => config->{author}, },
-	) for @posts[0 .. ($#posts > (config->{conf}->{recent_posts}-1)? (config->{conf}->{recent_posts}-1) : $#posts)];
-	$feed->save("$basedir/public/feed-rss2.xml");
 }
 sub do_cache {
 	return if $lastcache > (time - 3600);
@@ -181,37 +86,69 @@ sub do_cache {
 	pagination_calc;
 }
 
+sub GetPost {
+	my $params = shift or return undef;
+	return undef unless
+		$params->{year} =~ /^[0-9]{4}$/ and
+		$params->{month} =~ /^(0[1-9]|1[0-2])$/ and
+		$params->{slug};
+	
+	for my $article (@articles) {
+		next unless
+			$article->{slug} eq lc $params->{slug} and
+			$article->{yyyymm} eq $params->{year}.$params->{month};
+		return $article;
+	}
+	return undef;
+}
+
 hook 'before' => sub {
 	do_cache;
 	page_init;
 };
 
+#Indexes
 get '/' => sub {
 	return get_index @posts if $npages==1;
 	return paginate 1;
 };
-get '/page/:id' => sub {
+get '/page/:num' => sub {
 	pass unless params->{id} =~ /^[0-9]+$/ and params->{id} <= $npages;
 	return redirect '/' unless $npages > 1 and params->{id} > 1;
 	return paginate params->{id};
 };
-get '/wrote/:yyyy/:mm/:slug' => sub {
-	pass unless params->{yyyy} =~ /^[0-9]{4}$/ and params->{mm} =~ /^(?:0[1-9]|1[0-2])$/ and params->{slug} =~ /^[a-z0-9\-]+(?:\.md)?$/i;
-	if (params->{slug} =~ s/\.md$//) { $page->param(SOURCEVIEW => 1); header('Content-Type' => 'text/plain'); }
-	$page->param(ISPOST => 1);
-	get_post params->{yyyy}, params->{mm}, params->{slug} or pass;
-	return $page->output;
-};
-get '/:extpage' => sub {
+
+#Published articles
+get '/:page' => sub {
 	pass unless params->{extpage} =~ /^[a-z0-9\-]+(?:\.md)?$/i;
 	if (params->{extpage} =~ s/\.md$//) { $page->param(SOURCEVIEW => 1); header('Content-Type' => 'text/plain'); }
 	$page->param(ISPOST => 0);
 	get_page params->{extpage} or pass;
 	return $page->output;
 };
+get '/wrote/:yyyy/:mm/:slug' => sub {
+	my $article = GetPost scalar params 'route';
+	pass unless $article;
+	content_tyle 'text/plain' and return $article->{raw}
+		if params->{slug} =~ /\.md$/;
+	
+	return template 'post', { page => $article };
+};
+
+#Feeds
+get '/feed/:type' => sub {
+	pass unless params->{type} =~ /^(rss|atom)$/i;
+	create_feed
+		format => lc params->{type},
+		title => config->{blogtitle},
+		link => request->base,
+		entries => \@articles;
+}
+get qr{/feed-(atom|rss2).xml} => sub { redirect '/feed/'.splat; }
+
 # 404
 any qr/.*/ => sub {
-	return redirect '/' if request->path =~ /index(?:\.(?:html?|pl)?)?$/;
+	redirect '/' if request->path =~ /index\.(html?|pl)$/;
 	return send_error('The page you seek cannot be found.', 404);
 };
 

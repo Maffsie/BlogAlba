@@ -1,22 +1,27 @@
-appname: "BlogAlba"
+appname: "App::BlogAlba"
+layout: "main"
 charset: "UTF-8"
 tz: "Europe/London"
 locale: "en_GB"
 
-logger: "console"
-log: "debug"
+template: "template_toolkit"
+engines:
+  template:
+    template_toolkit:
+      encoding:  'utf8'
+      start_tag: '[%'
+      end_tag:   '%]'
 
-# Uncomment for debugging
-#show_errors: 1
 
-#Blog configuration
-url: https://maff.scot/
+#Site configuration
+
+#url: https://maff.scot/
 name: colourful words and phrases
 tagline: techy tangents and general life chatter from a tired sysadmin.
 author: Maff
 about: A dorky dude who spends too much time with perl.
 keywords: "sysadmin,unix,bsd,freebsd,linux,software,web,developer,perl,bash,shell,gentoo,maff,matthew,connelly,dundee,scotland,furry,blog"
-posturlprepend: wrote/
+blog_prepend: wrote
 conf:
   indexable: 1
   per_page: 6

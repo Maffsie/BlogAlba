@@ -1,0 +1,5 @@
+logger: "console"
+log: "core"
+warnings: 1
+show_errors: 1
+startup_info: 1
